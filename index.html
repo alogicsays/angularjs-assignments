@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+<html lang="en" ng-app="angularPracticeApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AngularJS Practice Assignments</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- AngularJS Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+
+    <!-- Application Files -->
+    <script src="js/app.js"></script>
+    <script src="js/controllers/fundamentalsController.js"></script>
+    <script src="js/controllers/farmerController.js"></script>
+    <script src="js/services/apiService.js"></script>
+    <script src="js/controllers/apiController.js"></script>
+
+</head>
+
+<body>
+
+<body ng-controller="FundamentalsController">
+
+    <h1>AngularJS Fundamentals</h1>
+
+    <!-- Two-way Data Binding -->
+    <section>
+        <h2>1. Two-way Data Binding (ng-model)</h2>
+
+        <label>Enter your name:</label>
+        <input type="text" ng-model="studentName">
+
+        <p>Hello, {{ studentName }}!</p>
+    </section>
+
+
+    <!-- ng-repeat -->
+    <section>
+        <h2>2. ng-repeat - Subject List</h2>
+
+        <ul>
+            <li ng-repeat="subject in subjects">
+                {{ subject }}
+            </li>
+        </ul>
+    </section>
+
+
+    <!-- Add Subject -->
+    <section>
+        <h2>3. Add a Subject</h2>
+
+        <input type="text"
+               ng-model="newSubject"
+               placeholder="Enter subject name">
+
+        <button ng-click="addSubject()">Add Subject</button>
+    </section>
+
+
+    <!-- ng-if -->
+    <section>
+        <h2>4. ng-if - Conditional Display</h2>
+
+        <p ng-if="subjects.length > 0">
+            Subjects are available!
+        </p>
+
+        <p ng-if="subjects.length === 0">
+            No subjects available.
+        </p>
+    </section>
+
+
+    <!-- ng-show -->
+    <section>
+        <h2>5. ng-show - Show and Hide</h2>
+
+        <p ng-show="showMessage">
+            Welcome to AngularJS!
+        </p>
+
+        <button ng-click="showMessage = !showMessage">
+            Toggle Message
+        </button>
+    </section>
+
+<!-- Assignment 2: Farmer Registration -->
+
+<div ng-controller="FarmerController">
+
+    <section>
+        <h2>Assignment 2 - Farmer Registration</h2>
+
+        <form name="farmerForm"
+              ng-submit="registerFarmer(farmerForm)"
+              novalidate>
+
+            <!-- Farmer Name -->
+            <label>Farmer Name</label>
+            <input type="text"
+                   name="name"
+                   ng-model="farmer.name"
+                   required>
+
+            <p ng-if="farmerForm.name.$invalid &&
+                      (farmerForm.name.$touched || farmerForm.$submitted)">
+                Farmer name is required.
+            </p>
+
+
+            <!-- Mobile Number -->
+            <label>Mobile Number</label>
+            <input type="tel"
+                   name="mobile"
+                   ng-model="farmer.mobile"
+                   ng-pattern="/^[6-9][0-9]{9}$/"
+                   required>
+
+            <p ng-if="farmerForm.mobile.$error.required &&
+                      (farmerForm.mobile.$touched || farmerForm.$submitted)">
+                Mobile number is required.
+            </p>
+
+            <p ng-if="farmerForm.mobile.$error.pattern &&
+                      (farmerForm.mobile.$touched || farmerForm.$submitted)">
+                Enter a valid 10-digit mobile number.
+            </p>
+
+
+            <!-- Address -->
+            <label>Address</label>
+            <textarea name="address"
+                      ng-model="farmer.address"
+                      required></textarea>
+
+            <p ng-if="farmerForm.address.$invalid &&
+                      (farmerForm.address.$touched || farmerForm.$submitted)">
+                Address is required.
+            </p>
+
+
+            <!-- Village -->
+            <label>Village</label>
+            <input type="text"
+                   name="village"
+                   ng-model="farmer.village"
+                   required>
+
+            <p ng-if="farmerForm.village.$invalid &&
+                      (farmerForm.village.$touched || farmerForm.$submitted)">
+                Village is required.
+            </p>
+
+
+            <!-- Crop -->
+            <label>Crop</label>
+            <input type="text"
+                   name="crop"
+                   ng-model="farmer.crop"
+                   required>
+
+            <p ng-if="farmerForm.crop.$invalid &&
+                      (farmerForm.crop.$touched || farmerForm.$submitted)">
+                Crop is required.
+            </p>
+
+
+            <button type="submit">Register Farmer</button>
+
+            <!-- Success Message -->
+            <p ng-if="successMessage">
+                {{ successMessage }}
+            </p>
+
+        </form>
+
+    </section>
+
+</div>
+
+<!-- Assignment 3: REST API Integration -->
+
+<div ng-controller="ApiController">
+
+    <section>
+
+        <h2>Assignment 3 - REST API Integration</h2>
+
+        <!-- GET Request -->
+        <h3>Fetch Users (GET Request)</h3>
+
+        <button ng-click="fetchUsers()">
+            Fetch Users
+        </button>
+
+        <!-- Loading Message -->
+        <p ng-if="loading">
+            Loading users...
+        </p>
+
+        <!-- Error Message -->
+        <p ng-if="errorMessage">
+            {{ errorMessage }}
+        </p>
+
+        <!-- Display Users -->
+        <div ng-if="!loading && users.length > 0">
+
+            <h3>User Details</h3>
+
+            <div ng-repeat="user in users">
+
+                <h4>{{ user.name }}</h4>
+
+                <p>Email: {{ user.email }}</p>
+
+                <hr>
+
+            </div>
+
+        </div>
+
+
+        <!-- POST Request -->
+        <h3>Add New User (POST Request)</h3>
+
+        <form ng-submit="addUser()" novalidate>
+
+            <label>User Name</label>
+
+            <input type="text"
+                   ng-model="newUser.name"
+                   placeholder="Enter user name"
+                   required>
+
+            <label>Email Address</label>
+
+            <input type="email"
+                   ng-model="newUser.email"
+                   placeholder="Enter email address"
+                   required>
+
+            <button type="submit">
+                Add User
+            </button>
+
+        </form>
+
+        <!-- Success Message -->
+        <p class="success-message" ng-if="successMessage">
+            {{ successMessage }}
+        </p>
+
+    </section>
+
+</div>
+
+</body>
+
+
+</body>
+</html>
